@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fendir-frontend
+spec:
+  selector:
+    matchLabels:
+      app: fendir-frontend
+  template:
+    metadata:
+      labels:
+        app: fendir-frontend
+    spec:
+      containers:
+      - name: fendir-frontend
+        image: akarshjain001/fendir-frontend
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+        - name: BACKEND_URL
+          value: http://fendir-backend.fendir.svc.cluster.local
+        ports:
+        - containerPort: 9000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fendir-frontend
+spec:
+  selector:
+    app: fendir-frontend
+  ports:
+  - port: 80
+    targetPort: 9000
+
